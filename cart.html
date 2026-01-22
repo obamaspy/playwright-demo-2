@@ -28,6 +28,29 @@
         .checkout-btn { background: var(--primary); color: white; border: none; padding: 1rem 2rem; border-radius: 6px; font-weight: bold; text-decoration: none; display: inline-block; }
         .checkout-btn:hover { background: #1d4ed8; }
         .empty-cart { padding: 3rem; text-align: center; color: #6b7280; }
+
+        @media (max-width: 640px) {
+            nav {
+                padding: 1rem;
+                justify-content: center;
+            }
+            .cart-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            .cart-header {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: flex-start;
+            }
+            .cart-summary {
+                align-items: stretch;
+            }
+            .checkout-btn {
+                text-align: center;
+            }
+        }
     </style>
 </head>
 <body>

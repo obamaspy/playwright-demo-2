@@ -8,6 +8,10 @@ test.describe('Cart Page Functionality', () => {
     // 1. Navigate to cart.html
     await page.goto('file:///home/emoi_user/Workspace/playwright%20demo%202/cart.html');
 
+    // Clear localStorage before test
+    await page.evaluate(() => localStorage.clear());
+    await page.reload();
+    
     // 2. Verify page title is 'Cart - StyleAutomation'
     await expect(page).toHaveTitle('Cart - StyleAutomation');
 

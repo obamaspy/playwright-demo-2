@@ -38,6 +38,22 @@
         button.add-to-cart { width: 100%; padding: 0.75rem; background-color: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; margin-top: auto; transition: background 0.2s; }
         button.add-to-cart:hover { background-color: #1d4ed8; }
         button.add-to-cart:disabled { background-color: #9ca3af; cursor: not-allowed; }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+            .container {
+                margin: 1rem auto;
+            }
+            .logo {
+                flex-basis: 100%;
+                text-align: center;
+            }
+        }
     </style>
 </head>
 <body>

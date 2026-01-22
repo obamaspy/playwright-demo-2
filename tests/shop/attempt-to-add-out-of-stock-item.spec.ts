@@ -7,9 +7,14 @@ test.describe('Shop Page Functionality', () => {
   test('Attempt to Add Out of Stock Item', async ({ page }) => {
     // 1. Navigate to the shop page
     await page.goto('file:///home/emoi_user/Workspace/playwright%20demo%202/index.html');
+    
+    // Clear localStorage before test
+    await page.evaluate(() => localStorage.clear());
+    await page.reload();
 
     // 2. Attempt to click 'Out of Stock' button for 'Limited Edition Cap'
-    const outOfStockButton = page.getByRole('button', { name: 'Out of Stock' });
+    const outOfStockButton = page.locator('.product-card:has-text("Limited Edition Cap") button');
+    await outOfStockButton.click({ force: true });
 
     // 3. Verify button does not respond
     await expect(outOfStockButton).toBeDisabled();

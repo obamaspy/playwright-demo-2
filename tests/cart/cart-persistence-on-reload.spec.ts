@@ -8,6 +8,10 @@ test.describe('Cart Page Functionality', () => {
     // 1. Navigate to index.html
     await page.goto('file:///home/emoi_user/Workspace/playwright%20demo%202/index.html');
 
+    // Clear localStorage before test
+    await page.evaluate(() => localStorage.clear());
+    await page.reload();
+    
     // 2. Add items to cart
     await page.getByTestId('add-to-cart-btn').first().click();
     await expect(page.getByTestId('cart-badge')).toHaveText('1');
