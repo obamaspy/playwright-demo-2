@@ -21,11 +21,15 @@ test.describe('Edge Cases and Error Handling', () => {
     await page.evaluate(() => {
       let cart = [];
       try {
-        cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const cartData = localStorage.getItem('cart');
+        cart = cartData ? JSON.parse(cartData) : [];
       } catch (e) {
         cart = [];
       }
-      document.getElementById('cart-count').innerText = cart.length;
+      const cartCountElem = document.getElementById('cart-count');
+      if (cartCountElem) {
+        cartCountElem.innerText = cart.length;
+      }
     });
     await expect(page.getByText('100')).toBeVisible();
 
