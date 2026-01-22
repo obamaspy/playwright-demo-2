@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmed - StyleAutomation</title>
+    <style>
+        :root { --primary: #2563eb; --gray: #f3f4f6; --text: #1f2937; --success: #059669; }
+        body { font-family: system-ui, -apple-system, sans-serif; margin: 0; background-color: var(--gray); color: var(--text); }
+        
+        nav { background: white; padding: 1rem 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-weight: bold; font-size: 1.5rem; color: var(--primary); text-decoration: none; }
+
+        .container { max-width: 600px; margin: 3rem auto; padding: 0 1rem; }
+        
+        .confirmation-card { 
+            background: white; 
+            padding: 2.5rem; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+            text-align: center;
+        }
+
+        .check-icon { 
+            background: #dcfce7; 
+            color: var(--success); 
+            width: 80px; height: 80px; 
+            border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            font-size: 3rem; margin: 0 auto 1.5rem auto; 
+        }
+
+        h1 { margin: 0 0 0.5rem 0; color: var(--text); }
+        .subtitle { color: #6b7280; margin-bottom: 2rem; }
+
+        .order-details { text-align: left; background: #f9fafb; border-radius: 6px; padding: 1.5rem; margin-bottom: 2rem; border: 1px solid #e5e7eb; }
+        
+        .detail-row { display: flex; justify-content: space-between; margin-bottom: 0.75rem; font-size: 0.95rem; }
+        .detail-row.total { border-top: 1px solid #e5e7eb; margin-top: 1rem; padding-top: 1rem; font-weight: bold; font-size: 1.1rem; }
+        
+        .label { color: #6b7280; }
+        .value { font-weight: 600; color: var(--text); }
+
+        /* Updated Button Style */
+        .btn-home { 
+            display: inline-block; 
+            background: var(--primary); 
+            color: white; 
+            text-decoration: none; 
+            padding: 0.75rem 1.5rem; 
+            border-radius: 6px; 
+            font-weight: 600; 
+            transition: background 0.2s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .btn-home:hover { background: #1d4ed8; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="index.html" class="logo">StyleAutomation</a>
+</nav>
+
+<div class="container">
+    <div class="confirmation-card">
+        <div class="check-icon">✓</div>
+        <h1 data-testid="complete-header">Thank you for your order!</h1>
+        <p class="subtitle">A confirmation has been sent to <span id="display-email" style="font-weight:bold;"></span></p>
+
+        <div class="order-details">
+            <div class="detail-row">
+                <span class="label">Order Number</span>
+                <span class="value" id="order-id" data-testid="order-id">#Loading...</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Payment Method</span>
+                <span class="value">Visa ending in <span id="last-four">****</span></span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Shipping To</span>
+                <span class="value" id="ship-name">Loading...</span>
+            </div>
+             <div class="detail-row">
+                <span class="label">Items</span>
+                <span class="value" id="item-count">0 items</span>
+            </div>
+            
+            <div class="detail-row total">
+                <span>Total Paid</span>
+                <span id="order-total" data-testid="order-total">$0.00</span>
+            </div>
+        </div>
+
+        <button onclick="finishShopping()" class="btn-home" data-testid="continue-btn">Continue Shopping</button>
+    </div>
+</div>
+
+<script>
+    // 1. Retrieve data on load
+    const orderData = JSON.parse(localStorage.getItem('latestOrder'));
+
+    if (orderData) {
+        document.getElementById('display-email').innerText = orderData.email;
+        document.getElementById('order-id').innerText = '#' + orderData.orderId;
+        document.getElementById('last-four').innerText = orderData.cardNumber || '****';
+        document.getElementById('ship-name').innerText = orderData.firstName + ' ' + orderData.lastName;
+        document.getElementById('item-count').innerText = orderData.cart.length + ' item(s)';
+        document.getElementById('order-total').innerText = orderData.total;
+    } else {
+        document.querySelector('.subtitle').innerText = "Order details not found.";
+    }
+
+    // 2. Function to clean up state and redirect
+    function finishShopping() {
+        // Clear the specific order data so the session is fresh
+        localStorage.removeItem('latestOrder');
+        
+        // Redirect to Home
+        window.location.href = 'index.html';
+    }
+</script>
+
+</body>
+</html>

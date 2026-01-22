@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - StyleAutomation</title>
+    <style>
+        :root { --primary: #2563eb; --gray: #f3f4f6; --text: #1f2937; --danger: #ef4444; }
+        body { font-family: system-ui, -apple-system, sans-serif; margin: 0; background-color: var(--gray); color: var(--text); }
+        
+        /* Navbar */
+        nav { background: white; padding: 1rem 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .logo { font-weight: bold; font-size: 1.5rem; color: var(--primary); text-decoration: none; }
+        .cart-link { text-decoration: none; color: var(--text); font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .cart-link:hover { color: var(--primary); }
+        #cart-count { background: var(--primary); color: white; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.9rem; }
+
+        /* Grid */
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
+        
+        /* Cards */
+        .product-card { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; flex-direction: column; transition: transform 0.2s; }
+        .product-card:hover { transform: translateY(-4px); box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
+        
+        .image-placeholder { width: 100%; height: 200px; background-color: #e5e7eb; display: flex; align-items: center; justify-content: center; font-size: 3rem; }
+        .card-content { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; }
+        
+        .product-title { margin: 0 0 0.5rem 0; font-size: 1.1rem; line-height: 1.4; }
+        .product-desc { color: #6b7280; font-size: 0.9rem; margin-bottom: 1rem; flex-grow: 1; }
+        
+        /* Price Tags */
+        .price-container { margin-bottom: 0.5rem; }
+        .price { font-size: 1.25rem; font-weight: bold; color: var(--text); }
+        .original-price { text-decoration: line-through; color: #9ca3af; font-size: 0.9rem; margin-right: 8px; }
+        .sale-tag { background: var(--danger); color: white; font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; vertical-align: middle; margin-left: 8px; }
+
+        button.add-to-cart { width: 100%; padding: 0.75rem; background-color: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; margin-top: auto; transition: background 0.2s; }
+        button.add-to-cart:hover { background-color: #1d4ed8; }
+        button.add-to-cart:disabled { background-color: #9ca3af; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="index.html" class="logo" data-testid="nav-home">StyleAutomation</a>
+    <a href="cart.html" class="cart-link" data-testid="nav-cart">
+        Cart <span id="cart-count" data-testid="cart-badge">0</span>
+    </a>
+</nav>
+
+<div class="container">
+    <div class="grid">
+        
+        <div class="product-card" data-testid="product-item">
+            <div class="image-placeholder">👕</div>
+            <div class="card-content">
+                <h3 class="product-title">Vintage Denim Jacket</h3>
+                <p class="product-desc">Classic styling with durable denim.</p>
+                <div class="price-container">
+                    <span class="price">$59.99</span>
+                </div>
+                <button class="add-to-cart" data-testid="add-to-cart-btn" onclick="addToCart('Vintage Denim Jacket', 59.99, this)">Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="product-card" data-testid="product-item">
+            <div class="image-placeholder">👗</div>
+            <div class="card-content">
+                <h3 class="product-title">Summer Floral Dress</h3>
+                <p class="product-desc">Lightweight and breathable.</p>
+                <div class="price-container">
+                    <span class="price">$29.50</span>
+                </div>
+                <button class="add-to-cart" data-testid="add-to-cart-btn" onclick="addToCart('Summer Floral Dress', 29.50, this)">Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="product-card" data-testid="product-item">
+            <div class="image-placeholder">👟</div>
+            <div class="card-content">
+                <h3 class="product-title">Urban Running Sneakers</h3>
+                <p class="product-desc">High performance running shoes.</p>
+                <div class="price-container">
+                    <span class="price">$1,200.00</span>
+                </div>
+                <button class="add-to-cart" data-testid="add-to-cart-btn" onclick="addToCart('Urban Running Sneakers', 1200.00, this)">Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="product-card" data-testid="product-item">
+            <div class="image-placeholder">🧢</div>
+            <div class="card-content">
+                <h3 class="product-title">Limited Edition Cap</h3>
+                <p class="product-desc">Sold out everywhere.</p>
+                <div class="price-container">
+                    <span class="price">$15.00</span>
+                </div>
+                <button class="add-to-cart" disabled>Out of Stock</button>
+            </div>
+        </div>
+
+        <div class="product-card" data-testid="product-item">
+            <div class="image-placeholder">🎧</div>
+            <div class="card-content">
+                <h3 class="product-title">Noise-Cancelling Headphones</h3>
+                <p class="product-desc">Immersive sound quality.</p>
+                <div class="price-container">
+                    <span class="original-price">$250.00</span>
+                    <span class="price">$199.00</span>
+                    <span class="sale-tag">SALE</span>
+                </div>
+                <button class="add-to-cart" data-testid="add-to-cart-btn" onclick="addToCart('Noise-Cancelling Headphones', 199.00, this)">Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="product-card" data-testid="product-item">
+            <div class="image-placeholder">🎒</div>
+            <div class="card-content">
+                <h3 class="product-title">Travel Backpack</h3>
+                <p class="product-desc">Fits 15-inch laptops.</p>
+                <div class="price-container">
+                    <span class="price">$45</span>
+                </div>
+                <button class="add-to-cart" data-testid="add-to-cart-btn" onclick="addToCart('Travel Backpack', 45.00, this)">Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="product-card" data-testid="product-item">
+            <div class="image-placeholder">⚡</div>
+            <div class="card-content">
+                <h3 class="product-title" title="Full Name">Super High-Capacity Portable Power Bank with Fast Charging</h3>
+                <p class="product-desc">Never run out of battery again.</p>
+                <div class="price-container">
+                    <span class="price">$39.99</span>
+                </div>
+                <button class="add-to-cart" data-testid="add-to-cart-btn" onclick="addToCart('Power Bank', 39.99, this)">Add to Cart</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    updateBadge();
+    function addToCart(name, price, btn) {
+        const originalText = btn.innerText;
+        btn.innerText = "Adding...";
+        btn.disabled = true;
+        setTimeout(() => {
+            let cart = [];
+            try {
+                cart = JSON.parse(localStorage.getItem('cart')) || [];
+            } catch (e) {
+                cart = [];
+            }
+            cart.push({ name: name, price: price, id: Date.now() });
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateBadge();
+            btn.innerText = "Added!";
+            btn.style.backgroundColor = "#059669"; 
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.disabled = false;
+                btn.style.backgroundColor = "";
+            }, 1000);
+        }, 500); 
+    }
+    function updateBadge() {
+        let cart = [];
+        try {
+            cart = JSON.parse(localStorage.getItem('cart')) || [];
+        } catch (e) {
+            cart = [];
+        }
+        document.getElementById('cart-count').innerText = cart.length;
+    }
+</script>
+</body>
+</html>

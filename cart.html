@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - StyleAutomation</title>
+    <style>
+        :root { --primary: #2563eb; --gray: #f3f4f6; --text: #1f2937; --danger: #ef4444; }
+        body { font-family: system-ui, -apple-system, sans-serif; margin: 0; background-color: var(--gray); color: var(--text); }
+        
+        nav { background: white; padding: 1rem 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-weight: bold; font-size: 1.5rem; color: var(--primary); text-decoration: none; }
+        
+        .container { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+        .cart-wrapper { background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden; }
+        .cart-header { padding: 1.5rem; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; }
+        .cart-header h1 { margin: 0; font-size: 1.5rem; }
+        .cart-items { padding: 0; margin: 0; list-style: none; }
+        .cart-item { padding: 1.5rem; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; }
+        .item-info h3 { margin: 0 0 0.25rem 0; font-size: 1.1rem; }
+        .item-info .price { color: #6b7280; }
+        button.remove-btn { background: white; border: 1px solid #d1d5db; color: var(--danger); padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; }
+        button.remove-btn:hover { background: #fee2e2; border-color: var(--danger); }
+        
+        .cart-summary { background: #f9fafb; padding: 1.5rem; border-top: 1px solid #e5e7eb; display: flex; flex-direction: column; align-items: flex-end; }
+        .total-row { font-size: 1.25rem; font-weight: bold; margin-bottom: 1rem; display: flex; gap: 2rem; }
+        
+        .checkout-btn { background: var(--primary); color: white; border: none; padding: 1rem 2rem; border-radius: 6px; font-weight: bold; text-decoration: none; display: inline-block; }
+        .checkout-btn:hover { background: #1d4ed8; }
+        .empty-cart { padding: 3rem; text-align: center; color: #6b7280; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="index.html" class="logo" data-testid="nav-home">StyleAutomation</a>
+</nav>
+
+<div class="container">
+    <div class="cart-wrapper">
+        <div class="cart-header">
+            <h1>Shopping Cart</h1>
+            <span id="item-count">0 Items</span>
+        </div>
+        <ul class="cart-items" id="cart-list"></ul>
+        <div id="empty-message" class="empty-cart" style="display: none;">Your cart is empty.</div>
+        <div class="cart-summary" id="cart-summary">
+            <div class="total-row">
+                <span>Total:</span>
+                <span id="total-price" data-testid="total-price">$0.00</span>
+            </div>
+            <a href="checkout.html" class="checkout-btn" data-testid="checkout-btn">Proceed to Checkout</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    renderCart();
+    function renderCart() {
+        const cartList = document.getElementById('cart-list');
+        const emptyMsg = document.getElementById('empty-message');
+        const summary = document.getElementById('cart-summary');
+        const itemCount = document.getElementById('item-count');
+        const totalPrice = document.getElementById('total-price');
+
+        let cart = [];
+        try {
+            cart = JSON.parse(localStorage.getItem('cart')) || [];
+        } catch (e) {
+            cart = [];
+        }
+
+        if (cart.length === 0) {
+            cartList.innerHTML = '';
+            emptyMsg.style.display = 'block';
+            summary.style.display = 'none';
+            itemCount.innerText = '0 Items';
+            return;
+        }
+
+        emptyMsg.style.display = 'none';
+        summary.style.display = 'flex';
+        itemCount.innerText = `${cart.length} Item${cart.length !== 1 ? 's' : ''}`;
+
+        cartList.innerHTML = cart.map((item, index) => `
+            <li class="cart-item" data-testid="cart-item">
+                <div class="item-info">
+                    <h3 data-testid="item-name">${item.name}</h3>
+                    <div class="price">$${item.price.toLocaleString('en-US', {minimumFractionDigits: 2})}</div>
+                </div>
+                <button class="remove-btn" data-testid="remove-btn" onclick="removeItem(${index})">Remove</button>
+            </li>
+        `).join('');
+
+        const total = cart.reduce((sum, item) => sum + item.price, 0);
+        totalPrice.innerText = '$' + total.toLocaleString('en-US', {minimumFractionDigits: 2});
+    }
+
+    function removeItem(index) {
+        let cart = [];
+        try {
+            cart = JSON.parse(localStorage.getItem('cart')) || [];
+        } catch (e) {
+            cart = [];
+        }
+        cart.splice(index, 1);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        renderCart();
+    }
+</script>
+</body>
+</html>
